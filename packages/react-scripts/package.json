@@ -1,6 +1,6 @@
 {
   "name": "@swrve/react-scripts",
-  "version": "2.1.11",
+  "version": "2.2.1",
   "description": "Configuration and scripts for Create React App.",
   "repository": "@swrve/create-react-app",
   "license": "MIT",
@@ -73,7 +73,7 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
-    "tailwindcss": "^0.7.4",
+    "tailwindcss": "^0.4.3",
     "terser-webpack-plugin": "1.2.2",
     "url-loader": "1.1.2",
     "webpack": "4.28.3",
