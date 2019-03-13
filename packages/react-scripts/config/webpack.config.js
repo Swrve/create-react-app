@@ -102,8 +102,7 @@ module.exports = function(webpackEnv) {
           plugins: () => [
             require('postcss-easy-import'),
             require('postcss-url'),
-            // require('tailwindcss')(require('@swrve/tailwind-config')),
-            require('tailwindcss')('./tailwind.js'),
+            require('tailwindcss')(require('@swrve/tailwind-config')),
             require('cssnano')({
               preset: 'default',
               discardComments: { removeAll: true },
