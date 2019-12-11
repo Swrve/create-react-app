@@ -23,7 +23,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
     : undefined;
 
   const config = {
-    roots: ['<rootDir>/src'],
+    // Swrve: Add '<rootDir>/__mocks__' to allow mocked modules to be found off root of project.
+    roots: ['<rootDir>/src', '<rootDir>/__mocks__'],
 
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
 
