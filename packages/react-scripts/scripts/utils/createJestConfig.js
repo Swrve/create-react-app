@@ -40,6 +40,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     ],
     testEnvironment: 'jest-environment-jsdom-fourteen',
     transform: {
+      // Swrve: Allow graphql files to be processed by jest.
       '\\.(gql|graphql)$': require.resolve('jest-transform-graphql'),
       '^.+\\.(js|jsx|ts|tsx)$': isEjecting
         ? '<rootDir>/node_modules/babel-jest'

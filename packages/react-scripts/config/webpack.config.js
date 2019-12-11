@@ -22,6 +22,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+// Swrve: Commenting out for performance.
 // const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -111,6 +112,7 @@ module.exports = function(webpackEnv) {
           // https://github.com/facebook/create-react-app/issues/2677
           ident: 'postcss',
           plugins: () => [
+            // Swrve (START): Adding for Tailwind to work.
             require('postcss-easy-import'),
             require('postcss-url'),
             require('tailwindcss')(require('@swrve/tailwind-config')),
@@ -119,6 +121,7 @@ module.exports = function(webpackEnv) {
               discardComments: { removeAll: true },
               reduceIdents: false,
             }),
+            // Swrve (END): Adding for Tailwind to work.
             require('postcss-flexbugs-fixes'),
             require('postcss-preset-env')({
               autoprefixer: {
@@ -404,9 +407,12 @@ module.exports = function(webpackEnv) {
               loader: require.resolve('url-loader'),
               options: {
                 limit: imageInlineSizeLimit,
+                // Swrve (START): Support media file location resolution.
                 publicPath: isEnvProduction ? '../media' : '/static/media',
                 outputPath: 'static/media',
                 name: '[name].[hash:8].[ext]',
+                // name: 'static/media/[name].[hash:8].[ext]',
+                // Swrve (END): Support media file location resolution.
               },
             },
             // Process application JS with Babel.
@@ -567,11 +573,13 @@ module.exports = function(webpackEnv) {
                 'sass-loader'
               ),
             },
+            // Swrve (START): Add GraphQL file loading support.
             {
               test: /\.(graphql|gql)$/,
               loader: 'graphql-tag/loader',
               exclude: /node_modules/,
             },
+            // Swrve (END): Add GraphQL file loading support.
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
@@ -585,9 +593,12 @@ module.exports = function(webpackEnv) {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
+                // Swrve (START): Support media file location resolution.
                 publicPath: isEnvProduction ? '../media' : '/static/media',
                 outputPath: 'static/media',
                 name: '[name].[hash:8].[ext]',
+                // name: 'static/media/[name].[hash:8].[ext]',
+                // Swrve (END): Support media file location resolution.
               },
             },
             // ** STOP ** Are you adding a new loader?
@@ -696,22 +707,24 @@ module.exports = function(webpackEnv) {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
+      // Swrve (START): Comment out for performance.
       // isEnvProduction &&
-      //  new WorkboxWebpackPlugin.GenerateSW({
-      //    clientsClaim: true,
-      //    exclude: [/\.map$/, /asset-manifest\.json$/],
-      //    importWorkboxFrom: 'cdn',
-      //    navigateFallback: publicUrl + '/index.html',
-      //    navigateFallbackBlacklist: [
-      //      // Exclude URLs starting with /_, as they're likely an API call
-      //      new RegExp('^/_'),
-      //      // Exclude any URLs whose last part seems to be a file extension
-      //      // as they're likely a resource and not a SPA route.
-      //      // URLs containing a "?" character won't be blacklisted as they're likely
-      //      // a route with query params (e.g. auth callbacks).
-      //      new RegExp('/[^/?]+\\.[^/]+$'),
-      //    ],
-      //  }),
+      //   new WorkboxWebpackPlugin.GenerateSW({
+      //     clientsClaim: true,
+      //     exclude: [/\.map$/, /asset-manifest\.json$/],
+      //     importWorkboxFrom: 'cdn',
+      //     navigateFallback: publicUrl + '/index.html',
+      //     navigateFallbackBlacklist: [
+      //       // Exclude URLs starting with /_, as they're likely an API call
+      //       new RegExp('^/_'),
+      //       // Exclude any URLs whose last part seems to be a file extension
+      //       // as they're likely a resource and not a SPA route.
+      //       // URLs containing a "?" character won't be blacklisted as they're likely
+      //       // a route with query params (e.g. auth callbacks).
+      //       new RegExp('/[^/?]+\\.[^/]+$'),
+      //     ],
+      //   }),
+      // Swrve (END): Comment out for performance.
       // TypeScript type checking
       useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
