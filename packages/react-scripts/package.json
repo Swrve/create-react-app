@@ -1,6 +1,6 @@
 {
   "name": "@swrve/react-scripts",
-  "version": "3.3.1-alpha",
+  "version": "3.3.0",
   "description": "Configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
