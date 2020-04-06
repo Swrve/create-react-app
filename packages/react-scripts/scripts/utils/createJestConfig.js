@@ -39,7 +39,6 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
       '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
     ],
-    testEnvironment: 'jest-environment-jsdom-fourteen',
     transform: {
       // Swrve: Allow graphql files to be processed by jest.
       '\\.(gql|graphql)$': require.resolve('jest-transform-graphql'),
