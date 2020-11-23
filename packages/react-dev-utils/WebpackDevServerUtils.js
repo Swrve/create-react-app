@@ -28,14 +28,14 @@ function prepareUrls(protocol, host, port, pathname = '/') {
       protocol,
       hostname,
       port,
-      pathname,
+      pathname
     });
   const prettyPrintUrl = hostname =>
     url.format({
       protocol,
       hostname,
       port: chalk.bold(port),
-      pathname,
+      pathname
     });
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::';
@@ -72,7 +72,7 @@ function prepareUrls(protocol, host, port, pathname = '/') {
     lanUrlForConfig,
     lanUrlForTerminal,
     localUrlForTerminal,
-    localUrlForBrowser,
+    localUrlForBrowser
   };
 }
 
@@ -109,7 +109,7 @@ function createCompiler({
   useYarn,
   useTypeScript,
   tscCompileOnError,
-  webpack,
+  webpack
 }) {
   // "Compiler" is a low-level interface to webpack.
   // It lets us listen to some events and provide our own custom messages.
@@ -157,7 +157,7 @@ function createCompiler({
           errors: allMsgs.filter(msg => msg.severity === 'error').map(format),
           warnings: allMsgs
             .filter(msg => msg.severity === 'warning')
-            .map(format),
+            .map(format)
         });
       });
   }
@@ -177,7 +177,7 @@ function createCompiler({
     const statsData = stats.toJson({
       all: false,
       warnings: true,
-      errors: true,
+      errors: true
     });
 
     if (useTypeScript && statsData.errors.length === 0) {
@@ -420,7 +420,7 @@ function prepareProxy(proxy, appPublicFolder, servedPathname) {
       // Modern browsers include text/html into `accept` header when navigating.
       // However API calls like `fetch()` won’t generally accept text/html.
       // If this heuristic doesn’t work well for you, use `src/setupProxy.js`.
-      context: function (pathname, req) {
+      context: function(pathname, req) {
         return (
           req.method !== 'GET' ||
           (mayProxy(pathname) &&
@@ -440,8 +440,8 @@ function prepareProxy(proxy, appPublicFolder, servedPathname) {
       secure: false,
       changeOrigin: true,
       ws: true,
-      xfwd: true,
-    },
+      xfwd: true
+    }
   ];
 }
 
@@ -467,7 +467,7 @@ function choosePort(host, defaultPort) {
                 message +
                   `${existingProcess ? ` Probably:\n  ${existingProcess}` : ''}`
               ) + '\n\nWould you like to run the app on another port instead?',
-            initial: true,
+            initial: true
           };
           prompts(question).then(answer => {
             if (answer.shouldChangePort) {
@@ -496,5 +496,5 @@ module.exports = {
   choosePort,
   createCompiler,
   prepareProxy,
-  prepareUrls,
+  prepareUrls
 };

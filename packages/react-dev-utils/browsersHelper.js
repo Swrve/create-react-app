@@ -18,8 +18,8 @@ const defaultBrowsers = {
   development: [
     'last 1 chrome version',
     'last 1 firefox version',
-    'last 1 safari version',
-  ],
+    'last 1 safari version'
+  ]
 };
 
 function shouldSetBrowsers(isInteractive) {
@@ -35,7 +35,7 @@ function shouldSetBrowsers(isInteractive) {
       `\n\nWould you like to add the defaults to your ${chalk.bold(
         'package.json'
       )}?`,
-    initial: true,
+    initial: true
   };
 
   return prompts(question).then(answer => answer.shouldSetBrowsers);
