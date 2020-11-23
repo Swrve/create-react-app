@@ -467,7 +467,7 @@ function choosePort(host, defaultPort) {
                 message +
                   `${existingProcess ? ` Probably:\n  ${existingProcess}` : ''}`
               ) + '\n\nWould you like to run the app on another port instead?',
-            initial: true
+            initial: true,
           };
           prompts(question).then(answer => {
             if (answer.shouldChangePort) {

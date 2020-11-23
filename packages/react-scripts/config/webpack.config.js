@@ -63,8 +63,10 @@ const imageInlineSizeLimit = parseInt(
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
+// Swrve (START): Comment out as not used.
 // Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
+// const swSrc = paths.swSrc;
+// Swrve (END): Comment out as not used.
 
 // style files regexes
 const cssRegex = /\.css$/;

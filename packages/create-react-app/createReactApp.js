@@ -611,7 +611,7 @@ function getInstallPackage(version, originalDirectory) {
         type: 'confirm',
         name: 'useScript',
         message: script.message,
-        initial: false
+        initial: false,
       }).then(answer => {
         if (!answer.useScript) {
           process.exit(0);

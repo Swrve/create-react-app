@@ -66,7 +66,7 @@ prompts({
   type: 'confirm',
   name: 'shouldEject',
   message: 'Are you sure you want to eject? This action is permanent.',
-  initial: false
+  initial: false,
 }).then(answer => {
   if (!answer.shouldEject) {
     console.log(cyan('Close one! Eject aborted.'));
@@ -233,14 +233,14 @@ prompts({
   // Add Babel config
   console.log(`  Adding ${cyan('Babel')} preset`);
   appPackage.babel = {
-    presets: ['react-app']
+    presets: ['react-app'],
   };
 
   // Add ESlint config
   if (!appPackage.eslintConfig) {
     console.log(`  Adding ${cyan('ESLint')} configuration`);
     appPackage.eslintConfig = {
-      extends: 'react-app'
+      extends: 'react-app',
     };
   }
 
@@ -323,7 +323,7 @@ prompts({
   } else {
     console.log(cyan('Running npm install...'));
     spawnSync('npm', ['install', '--loglevel', 'error'], {
-      stdio: 'inherit'
+      stdio: 'inherit',
     });
   }
   console.log(green('Ejected successfully!'));
