@@ -37,7 +37,7 @@ const envinfo = require('envinfo');
 const execSync = require('child_process').execSync;
 const fs = require('fs-extra');
 const hyperquest = require('hyperquest');
-const inquirer = require('inquirer');
+const prompts = require('prompts');
 const os = require('os');
 const path = require('path');
 const semver = require('semver');
@@ -156,14 +156,14 @@ function init() {
             'Edge',
             'Internet Explorer',
             'Firefox',
-            'Safari',
+            'Safari'
           ],
           npmPackages: ['react', 'react-dom', 'react-scripts'],
-          npmGlobalPackages: ['create-react-app'],
+          npmGlobalPackages: ['create-react-app']
         },
         {
           duplicates: true,
-          showNotFound: true,
+          showNotFound: true
         }
       )
       .then(console.log);
@@ -195,7 +195,9 @@ function init() {
   checkForLatestVersion()
     .catch(() => {
       try {
-        return execSync('npm view create-react-app version').toString().trim();
+        return execSync('npm view create-react-app version')
+          .toString()
+          .trim();
       } catch (e) {
         return null;
       }
@@ -264,7 +266,7 @@ function createApp(name, verbose, version, template, useNpm, usePnp) {
   const packageJson = {
     name: appName,
     version: '0.1.0',
-    private: true,
+    private: true
   };
   fs.writeFileSync(
     path.join(root, 'package.json'),
@@ -321,8 +323,9 @@ function createApp(name, verbose, version, template, useNpm, usePnp) {
     let yarnUsesDefaultRegistry = true;
     try {
       yarnUsesDefaultRegistry =
-        execSync('yarnpkg config get registry').toString().trim() ===
-        'https://registry.yarnpkg.com';
+        execSync('yarnpkg config get registry')
+          .toString()
+          .trim() === 'https://registry.yarnpkg.com';
     } catch (e) {
       // ignore
     }
@@ -390,7 +393,7 @@ function install(root, useYarn, usePnp, dependencies, verbose, isOnline) {
         '--save',
         '--save-exact',
         '--loglevel',
-        'error',
+        'error'
       ].concat(dependencies);
 
       if (usePnp) {
@@ -408,7 +411,7 @@ function install(root, useYarn, usePnp, dependencies, verbose, isOnline) {
     child.on('close', code => {
       if (code !== 0) {
         reject({
-          command: `${command} ${args.join(' ')}`,
+          command: `${command} ${args.join(' ')}`
         });
         return;
       }
@@ -429,7 +432,7 @@ function run(
 ) {
   Promise.all([
     getInstallPackage(version, originalDirectory),
-    getTemplateInstallPackage(template, originalDirectory),
+    getTemplateInstallPackage(template, originalDirectory)
   ]).then(([packageToInstall, templateToInstall]) => {
     const allDependencies = ['react', 'react-dom', packageToInstall];
 
@@ -437,13 +440,13 @@ function run(
 
     Promise.all([
       getPackageInfo(packageToInstall),
-      getPackageInfo(templateToInstall),
+      getPackageInfo(templateToInstall)
     ])
       .then(([packageInfo, templateInfo]) =>
         checkIfOnline(useYarn).then(isOnline => ({
           isOnline,
           packageInfo,
-          templateInfo,
+          templateInfo
         }))
       )
       .then(({ isOnline, packageInfo, templateInfo }) => {
@@ -492,7 +495,7 @@ function run(
         ).then(() => ({
           packageInfo,
           supportsTemplates,
-          templateInfo,
+          templateInfo
         }));
       })
       .then(async ({ packageInfo, supportsTemplates, templateInfo }) => {
@@ -508,7 +511,7 @@ function run(
         await executeNodeScript(
           {
             cwd: process.cwd(),
-            args: nodeArgs,
+            args: nodeArgs
           },
           [root, appName, verbose, originalDirectory, templateName],
           `
@@ -543,7 +546,7 @@ function run(
         const knownGeneratedFiles = [
           'package.json',
           'yarn.lock',
-          'node_modules',
+          'node_modules'
         ];
         const currentFiles = fs.readdirSync(path.join(root));
         currentFiles.forEach(file => {
@@ -598,26 +601,24 @@ function getInstallPackage(version, originalDirectory) {
         `The react-scripts-ts package is deprecated. TypeScript is now supported natively in Create React App. You can use the ${chalk.green(
           '--template typescript'
         )} option instead when generating your app to include TypeScript support. Would you like to continue using react-scripts-ts?`
-      ),
-    },
+      )
+    }
   ];
 
   for (const script of scriptsToWarn) {
     if (packageToInstall.startsWith(script.name)) {
-      return inquirer
-        .prompt({
-          type: 'confirm',
-          name: 'useScript',
-          message: script.message,
-          default: false,
-        })
-        .then(answer => {
-          if (!answer.useScript) {
-            process.exit(0);
-          }
+      return prompts({
+        type: 'confirm',
+        name: 'useScript',
+        message: script.message,
+        initial: false,
+      }).then(answer => {
+        if (!answer.useScript) {
+          process.exit(0);
+        }
 
-          return packageToInstall;
-        });
+        return packageToInstall;
+      });
     }
   }
 
@@ -688,7 +689,7 @@ function getTemporaryDirectory() {
               // Callback might throw and fail, since it's a temp directory the
               // OS will clean it up eventually...
             }
-          },
+          }
         });
       }
     });
@@ -751,13 +752,13 @@ function getPackageInfo(installPackage) {
     // git+https://github.com/mycompany/react-scripts.git
     // git+ssh://github.com/mycompany/react-scripts.git#v1.2.3
     return Promise.resolve({
-      name: installPackage.match(/([^/]+)\.git(#.*)?$/)[1],
+      name: installPackage.match(/([^/]+)\.git(#.*)?$/)[1]
     });
   } else if (installPackage.match(/.+@/)) {
     // Do not match @scope/ when stripping off @version or @tag
     return Promise.resolve({
       name: installPackage.charAt(0) + installPackage.substr(1).split('@')[0],
-      version: installPackage.split('@')[1],
+      version: installPackage.split('@')[1]
     });
   } else if (installPackage.match(/^file:/)) {
     const installPackagePath = installPackage.match(/^file:(.*)?$/)[1];
@@ -774,14 +775,16 @@ function checkNpmVersion() {
   let hasMinNpm = false;
   let npmVersion = null;
   try {
-    npmVersion = execSync('npm --version').toString().trim();
+    npmVersion = execSync('npm --version')
+      .toString()
+      .trim();
     hasMinNpm = semver.gte(npmVersion, '6.0.0');
   } catch (err) {
     // ignore
   }
   return {
     hasMinNpm: hasMinNpm,
-    npmVersion: npmVersion,
+    npmVersion: npmVersion
   };
 }
 
@@ -792,7 +795,9 @@ function checkYarnVersion() {
   let hasMaxYarnPnp = false;
   let yarnVersion = null;
   try {
-    yarnVersion = execSync('yarnpkg --version').toString().trim();
+    yarnVersion = execSync('yarnpkg --version')
+      .toString()
+      .trim();
     if (semver.valid(yarnVersion)) {
       hasMinYarnPnp = semver.gte(yarnVersion, minYarnPnp);
       hasMaxYarnPnp = semver.lt(yarnVersion, maxYarnPnp);
@@ -813,7 +818,7 @@ function checkYarnVersion() {
   return {
     hasMinYarnPnp: hasMinYarnPnp,
     hasMaxYarnPnp: hasMaxYarnPnp,
-    yarnVersion: yarnVersion,
+    yarnVersion: yarnVersion
   };
 }
 
@@ -860,7 +865,7 @@ function checkAppName(appName) {
     );
     [
       ...(validationResult.errors || []),
-      ...(validationResult.warnings || []),
+      ...(validationResult.warnings || [])
     ].forEach(error => {
       console.error(chalk.red(`  * ${error}`));
     });
@@ -950,14 +955,14 @@ function isSafeToCreateProjectIn(root, name) {
     'LICENSE',
     'README.md',
     'mkdocs.yml',
-    'Thumbs.db',
+    'Thumbs.db'
   ];
   // These files should be allowed to remain on a failed install, but then
   // silently removed during the next create.
   const errorLogFilePatterns = [
     'npm-debug.log',
     'yarn-error.log',
-    'yarn-debug.log',
+    'yarn-debug.log'
   ];
   const isErrorLog = file => {
     return errorLogFilePatterns.some(pattern => file.startsWith(pattern));
@@ -1011,7 +1016,9 @@ function getProxy() {
   } else {
     try {
       // Trying to read https-proxy from .npmrc
-      let httpsProxy = execSync('npm config get https-proxy').toString().trim();
+      let httpsProxy = execSync('npm config get https-proxy')
+        .toString()
+        .trim();
       return httpsProxy !== 'null' ? httpsProxy : undefined;
     } catch (e) {
       return;
@@ -1115,7 +1122,7 @@ function executeNodeScript({ cwd, args }, data, source) {
     child.on('close', code => {
       if (code !== 0) {
         reject({
-          command: `node ${args.join(' ')}`,
+          command: `node ${args.join(' ')}`
         });
         return;
       }
@@ -1149,5 +1156,5 @@ function checkForLatestVersion() {
 
 module.exports = {
   init,
-  getTemplateInstallPackage,
+  getTemplateInstallPackage
 };

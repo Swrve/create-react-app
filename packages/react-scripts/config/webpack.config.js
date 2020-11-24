@@ -63,8 +63,10 @@ const imageInlineSizeLimit = parseInt(
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
+// Swrve (START): Comment out as not used.
 // Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
+// const swSrc = paths.swSrc;
+// Swrve (END): Comment out as not used.
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -743,6 +745,10 @@ module.exports = function(webpackEnv) {
       //  swSrc,
       //  dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
       //  exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
+      // Bump up the default maximum size (2mb) that's precached,
+      // to make lazy-loading failure scenarios less likely.
+      // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
+      // maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       // }),
       // Swrve (END): Comment out for performance.
       // TypeScript type checking
